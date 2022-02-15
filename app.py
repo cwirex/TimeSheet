@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, render_template
 
 views = Blueprint('views', __name__, )
 auth = Blueprint('auth', __name__, )
@@ -14,17 +14,17 @@ def create_app():
 
 @views.route('/')
 def home():
-    return "<h1>Homepage</h1>"
+    return render_template("home.html")
 
 
 @auth.route('/login')
 def login():
-    return "<h1>Login</h1>"
+    return render_template("login.html")
 
 
 @auth.route('/register')
 def register():
-    return "<h1>Register</h1>"
+    return render_template("register.html")
 
 
 @auth.route('/logout')

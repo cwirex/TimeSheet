@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>
+        {% block title %}Hi, Flask!{% endblock %}
+    </title>
+</head>
+<body>
+    <nav>
+        <a id="home" href="/">Home</a>
+        <a id="login" href="/login">Login</a>
+        <a id="register" href="/register">Register</a>
+        <a id="logout" href="/logout">Logout</a>
+    </nav>
+    <div class="container">
+        {% block container %}BASE content here{% endblock %}
+    </div>
+
+
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
