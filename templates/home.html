@@ -9,6 +9,9 @@
             <h3 align="center">Your tasks:</h3>
             {% for task in user.tasks %}
                 <li class="list-group-item">
+                    <span class="list-inline-item list-group-item-light">
+                        {{ task.date.day }}.{{ task.date.month }} {{ task.date.hour }}:{{ task.date.minute }}
+                    </span>
                     {{ task.text }}
                     <button type="button" class="close" onClick="deleteTask({{ task.id }})">
                         <span aria-hidden="true">&times;</span>
