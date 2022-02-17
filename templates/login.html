@@ -5,5 +5,12 @@ Login
 {% endblock %}
 
 {% block container %}
-Login user
+    <h2>Login into account</h2>
+    <form method="POST">
+        <label for="login">Login</label>
+            <input type="email" id="login" name="login" placeholder="Your email"/>
+        <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Your password"/>
+        <button type="submit">Submit</button>
+    </form>
 {% endblock %}
