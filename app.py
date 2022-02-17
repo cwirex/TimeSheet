@@ -1,18 +1,19 @@
+import json
 import re
 from os import path
 
-from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 views = Blueprint('views', __name__, )
 auth = Blueprint('auth', __name__, )
+DB_NAME = "database.db"
 db = SQLAlchemy()
 loginMenager = LoginManager()
-DB_NAME = "database.db"
 
-from models import User
+from models import User, Task
 
 
 def create_app():
@@ -39,8 +40,36 @@ def load_user(user_id):
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    if request.method == 'POST':
+        data = request.form
+        text = data['text']
+        if len(text) < 4:
+            flash('Description too short.', category='error')
+        else:
+            user_id = current_user.id
+            task = Task(text=text, user_id=user_id)
+            try:
+                db.session.add(task)
+                db.session.commit()
+                flash('New task created successfully!')
+            except:
+                flash('New task cannot be created.')
     return render_template("home.html", user=current_user)
 
+
+@views.route('/delete-task', methods=['POST'])
+def delete_task():
+    data = json.loads(request.data)
+    task_id = data['taskId']
+    task = Task.query.get(task_id)
+    if task:
+        if task.user_id == current_user.id:
+            try:
+                db.session.delete(task)
+                db.session.commit()
+                return jsonify({})
+            except:
+                flash('Failed to delete the task', category='error')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
