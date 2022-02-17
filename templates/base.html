@@ -8,39 +8,86 @@
             {# TITLE #}
         {% endblock %}
     </title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+    />
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            crossorigin="anonymous"
+    />
 </head>
 <body>
-    <nav >
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
         {% if user.is_authenticated %}
-            <a id="home" href="/">Home</a>
-            <a id="logout" href="/logout">Logout</a>
-            <span>Hello, {{ user.email.split("@")[0].capitalize() }}</span>
-        {% else %}
-            <a id="login" href="/login">Login</a>
-            <a id="register" href="/register">Register</a>
-        {% endif %}
-    </nav>
-    <div class="container">
-        {% block container %}
-            {# CONTENT #}
-        {% endblock %}
-    </div>
-
-    {% with messeges = get_flashed_messages(with_categories=true) %}
-        {% if messeges %}
-            {% for cat, m in messeges %}
-            <div role="alert" class="alert">
-                {{ m }}
+            <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" id="home" href="/">Home</a>
+                <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
             </div>
-            {% endfor %}
+            <div class="navbar-nav">
+                <span class="nav-item navbar-text ">Hello, {{ user.email.split("@")[0].capitalize() }}</span>
+            </div>
+        {% else %}
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" id="login" href="/login">Login</a>
+                <a class="nav-item nav-link" id="register" href="/register">Register</a>
+            </div>
         {% endif %}
-    {% endwith %}
+
+    </div>
+</nav>
+
+{% with messeges = get_flashed_messages(with_categories=true) %}
+    {% if messeges %}
+        {% for cat, m in messeges %}
+            {% if cat =='error' %}
+                <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                    {{ m }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% else %}
+                <div class="alert alert-success alter-dismissable fade show" role="alert">
+                    {{ m }}
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="container">
+    {% block container %}
+        {# CONTENT #}
+    {% endblock %}
+</div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+<script
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"
+></script>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
