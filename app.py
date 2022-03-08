@@ -41,7 +41,13 @@ def load_user(user_id):
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template("home.html", user=current_user)
+    clients = {}
+    try:
+        for client in db.session.query(Client).order_by(Client.id):
+            clients[client.id] = client
+    except:
+        flash('Query clients failed.', category='error')
+    return render_template("home.html", user=current_user, clients=clients)
 
 
 @views.route('/client-manager', methods=['GET', 'POST'])
@@ -73,6 +79,7 @@ def task_creator():
         title = data['title']
         details = data['details']
         time_start = data['time_start']
+        client_id = int(data['select_client'])
         if time_start:
             time_start = datetime.strptime(time_start, '%Y-%m-%dT%H:%M')
         time_end = data['time_end']
@@ -82,19 +89,25 @@ def task_creator():
             flash('Title must be at least 3 characters.', category='error')
         else:
             user_id = current_user.id
-            if time_start and time_end:
-                task = Task(user_id=user_id, title=title, time_start=time_start, time_end=time_end, details=details)
-            elif time_start:
-                task = Task(user_id=user_id, title=title, time_start=time_start, details=details)
-            else:
-                task = Task(user_id=user_id, title=title, details=details)
+            task = Task(user_id=user_id, title=title, details=details)
+            if time_start:
+                task.time_start = time_start
+            if time_end:
+                task.time_end = time_end
+            if client_id != 0:
+                task.client_id = client_id
             try:
                 db.session.add(task)
                 db.session.commit()
-                flash('New task created successfully!')
+                flash('New task created successfully!', category='success')
             except:
                 flash('New task cannot be created.')
-    return render_template("task.html", user=current_user)
+    clients = []
+    try:
+        clients = db.session.query(Client).order_by(Client.last_name)
+    except:
+        flash('Query clients failed.', category='error')
+    return render_template("task.html", user=current_user, clients=clients)
 
 
 @views.route('/delete-task', methods=['POST'])

@@ -9,20 +9,36 @@
     <form method="POST">
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" class="form-control" placeholder="Title your task" required>
+            <input type="text" id="title" name="title" class="form-control" placeholder="Title your task" maxlength="200" required>
         </div>
         <div class="form-group">
             <label for="details">Details (optional)</label>
-            <textarea name="details" id="details" class="form-control" placeholder="Describe your task" spellcheck="true"></textarea>
+            <textarea name="details" id="details" class="form-control" placeholder="Describe your task" spellcheck="true" maxlength="1000"></textarea>
         </div>
-        <div class="form-group">
-            <label for="time_start">Define time frame (optional)</label>
+        <div class="row">
+            <div class="col-lg">
+                <div class="form-group">
+                    <label for="time_start">Define time frame (optional)</label>
+                <br/>
+                    <span style="margin: 0 10px 0 5px;">From</span>
+                    <input id="time_start" name="time_start" type="datetime-local"> <label for="time_end">
+                    <span style="margin: 0 10px 0 10px;">to</span>
+                    <input id="time_end" name="time_end" type="time"></label>
+                </div>
+            </div>
+            <div class="col-lg">
+                <div class="form-group">
+                    <label for="select_client">Associate task with a client (optional)</label>
+                    <select id="select_client" name="select_client" class="form-control">
+                        <option value="0">none</option>
+                        {% for c in clients %}
+                            <option value="{{ c.id }}">{{ c.first_name }} {{ c.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
         <br/>
-            <span style="margin: 0 10px 0 5px;">From</span>
-            <input id="time_start" name="time_start" type="datetime-local"> <label for="time_end">
-            <span style="margin: 0 10px 0 10px;">to</span>
-            <input id="time_end" name="time_end" type="time"></label>
-        </div>
         <div align="center">
             <button type="submit" class="btn btn-primary">Create Task</button>
         </div>

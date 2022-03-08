@@ -13,7 +13,7 @@
             <h3 align="center">My Tasks</h3>
             {% for task in user.tasks %}
                 <li class="list-group-item">
-                    <span class="list-inline-item list-group-item-light">
+                    <span class="list-inline-item text-primary">
                         {% if task.time_start.day and task.time_end.hour %}
                             {{ task.time_start.strftime("%d.%m, %H:%M") }}
                             - {{ task.time_end.strftime("%H:%M") }}
@@ -24,9 +24,17 @@
                         {% endif %}
                     </span>
                     <button type="button" class="close" onClick="deleteTask({{ task.id }})">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" class="text-danger">&times;</span>
                     </button>
-                    <h5>{{ task.title }}</h5>
+                    <h5>{{ task.title }}
+                        {% if task.client_id %}
+                            <span class="list-inline-item text-secondary font-weight-normal" style="margin-left: 10px;">
+                                ({{ clients[task.client_id].first_name }} {{ clients[task.client_id].last_name }}
+                            {% if clients[task.client_id].phone %}: {{ clients[task.client_id].phone }}{% endif %})
+
+                            </span>
+                        {% endif %}
+                    </h5>
                     {{ task.details }}
                 </li>
             {% endfor %}

@@ -62,6 +62,20 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+            {% elif cat == 'success' %}
+            <div class="alert alert-success alter-dismissable fade show" role="alert">
+                {{ m }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% else %}
+            <div class="alert alert-info alter-dismissable fade show" role="alert">
+                {{ m }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             {% endif %}
         {% endfor %}
     {% endif %}

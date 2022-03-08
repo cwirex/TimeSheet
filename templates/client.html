@@ -9,15 +9,15 @@
     <form method="POST">
         <div class="form-group">
             <label for="first_name">First Name</label>
-            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="John"/>
+            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="John" maxlength="50"/>
         </div>
         <div class="form-group">
             <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Smith"/>
+            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Smith" maxlength="50"/>
         </div>
         <div class="form-group">
             <label for="phone">Phone number (optional)</label>
-            <input type="tel" id="phone" minlength="9" name="phone" class="form-control" placeholder="740 070 040"/>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="740 070 040" minlength="9" maxlength="50"/>
         </div>
         <div align="center">
             <button type="submit" class="btn btn-primary">Submit</button>
