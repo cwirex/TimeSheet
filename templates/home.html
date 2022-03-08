@@ -1,33 +1,36 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+
+{% block title %}
+    Home
+{% endblock %}
+
 {% block container %}
     <br/>
     {% if not user.tasks %}
         <h3 align="center">You have no tasks!</h3>
     {% else %}
         <ul class="list-group list-group-flush" id="notes">
-            <h3 align="center">Your tasks:</h3>
+            <h3 align="center">My Tasks</h3>
             {% for task in user.tasks %}
                 <li class="list-group-item">
                     <span class="list-inline-item list-group-item-light">
-                        {{ task.date.day }}.{{ task.date.month }} {{ task.date.hour }}:{{ task.date.minute }}
+                        {% if task.time_start.day and task.time_end.hour %}
+                            {{ task.time_start.strftime("%d.%m, %H:%M") }}
+                            - {{ task.time_end.strftime("%H:%M") }}
+                        {% elif task.time_start.day %}
+                            {{ task.time_start.strftime("%d.%m, %H:%M") }}
+                        {% else %}
+                            Added {{ task.time_created.strftime("%d.%m, %H:%M") }}
+                        {% endif %}
                     </span>
-                    {{ task.text }}
                     <button type="button" class="close" onClick="deleteTask({{ task.id }})">
                         <span aria-hidden="true">&times;</span>
                     </button>
-
+                    <h5>{{ task.title }}</h5>
+                    {{ task.details }}
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
     <br/>
-    <form method="POST">
-        <label for="new_task">Create new task</label>
-        <textarea name="text" id="new_task" class="form-control" placeholder="Describe your task..."></textarea>
-        <br/>
-        <div align="center">
-            <button type="submit" class="btn btn-primary">Create</button>
-        </div>
-    </form>
 {% endblock %}

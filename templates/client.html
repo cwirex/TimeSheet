@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Client Manager
+{% endblock %}
+
+{% block container %}
+    <br/><h4>Create new client</h4><br/>
+    <form method="POST">
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="John"/>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Smith"/>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone number (optional)</label>
+            <input type="tel" id="phone" minlength="9" name="phone" class="form-control" placeholder="740 070 040"/>
+        </div>
+        <div align="center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock %}

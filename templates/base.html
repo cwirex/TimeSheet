@@ -29,10 +29,18 @@
         {% if user.is_authenticated %}
             <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" id="home" href="/">Home</a>
+                <a class="nav-item nav-link" id="tasks" href="/task-creator">Task creator</a>
+                <a class="nav-item nav-link" id="clients" href="/client-manager">Client Manager</a>
                 <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
             </div>
             <div class="navbar-nav">
-                <span class="nav-item navbar-text ">Hello, {{ user.email.split("@")[0].capitalize() }}</span>
+                <span class="nav-item navbar-text ">
+                    {% if user.name %}
+                        Hello, {{ user.name.capitalize() }}
+                    {% else %}
+                        Hello, {{ user.email.split("@")[0].capitalize() }}
+                    {% endif %}
+                </span>
             </div>
         {% else %}
             <div class="navbar-nav">

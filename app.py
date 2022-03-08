@@ -1,6 +1,7 @@
 import json
 import re
 from os import path
+from datetime import datetime
 
 from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -13,7 +14,7 @@ DB_NAME = "database.db"
 db = SQLAlchemy()
 loginMenager = LoginManager()
 
-from models import User, Task
+from models import User, Task, Client
 
 
 def create_app():
@@ -40,21 +41,60 @@ def load_user(user_id):
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    return render_template("home.html", user=current_user)
+
+
+@views.route('/client-manager', methods=['GET', 'POST'])
+@login_required
+def client_manager():
     if request.method == 'POST':
         data = request.form
-        text = data['text']
-        if len(text) < 4:
-            flash('Description too short.', category='error')
+        phone = data['phone']
+        first_name = data['first_name']
+        last_name = data['last_name']
+        if len(first_name) < 3 and len(last_name) < 3:
+            flash('Name must be at least 3 characters long.', category='error')
+        else:
+            client = Client(phone=phone, first_name=first_name, last_name=last_name)
+            try:
+                db.session.add(client)
+                db.session.commit()
+                flash('New task created successfully!')
+            except:
+                flash('New task cannot be created.')
+    return render_template("client.html", user=current_user)
+
+
+@views.route('/task-creator', methods=['GET', 'POST'])
+@login_required
+def task_creator():
+    if request.method == 'POST':
+        data = request.form
+        title = data['title']
+        details = data['details']
+        time_start = data['time_start']
+        if time_start:
+            time_start = datetime.strptime(time_start, '%Y-%m-%dT%H:%M')
+        time_end = data['time_end']
+        if time_end:
+            time_end = datetime.strptime(time_end, '%H:%M').time()
+        if len(title) < 3:
+            flash('Title must be at least 3 characters.', category='error')
         else:
             user_id = current_user.id
-            task = Task(text=text, user_id=user_id)
+            if time_start and time_end:
+                task = Task(user_id=user_id, title=title, time_start=time_start, time_end=time_end, details=details)
+            elif time_start:
+                task = Task(user_id=user_id, title=title, time_start=time_start, details=details)
+            else:
+                task = Task(user_id=user_id, title=title, details=details)
             try:
                 db.session.add(task)
                 db.session.commit()
                 flash('New task created successfully!')
             except:
                 flash('New task cannot be created.')
-    return render_template("home.html", user=current_user)
+    return render_template("task.html", user=current_user)
 
 
 @views.route('/delete-task', methods=['POST'])
@@ -70,6 +110,7 @@ def delete_task():
                 return jsonify({})
             except:
                 flash('Failed to delete the task', category='error')
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -97,6 +138,7 @@ def register():
         email = data['email']
         password1 = data['password1']
         password2 = data['password2']
+        name = data['name']
         if User.query.filter_by(email=email).first():
             flash('Email already taken.', category='error')
         elif password1 != password2:
@@ -106,7 +148,10 @@ def register():
         elif not re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', email):
             flash('Email is not valid.', category='error')
         else:
-            user = User(email=email, password=generate_password_hash(password1))
+            if name:
+                user = User(email=email, password=generate_password_hash(password1), name=name)
+            else:
+                user = User(email=email, password=generate_password_hash(password1))
             try:
                 db.session.add(user)
                 db.session.commit()
