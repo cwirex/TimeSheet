@@ -1,7 +1,7 @@
 _(project in progress)_
 # TimeSheet
-This is my first Flask project, advanced todo-list with extra features. I hope you enjoy!
-
+This is my first Flask project, advanced todo-list with extra features. I hope you enjoy!  
+![Screenshot](screenshot.png)
 ## Technologies used
 - Python
 - Flask
